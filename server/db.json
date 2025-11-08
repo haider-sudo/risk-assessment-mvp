@@ -1,0 +1,38 @@
+[
+  {
+    "id": "e4759771-f847-4471-bcd3-19d45eeb966f",
+    "timestamp": "2025-11-07T08:38:46.328Z",
+    "companyName": "qwkjdklwjdlkqw",
+    "industry": "manufacturing",
+    "contactPerson": "qldkkljd",
+    "email": "john@gmail.com",
+    "location": "lqwdlkdkqw",
+    "activity": "qwdqkdwjd",
+    "hazards": "qwkljdlkjwdkljwd",
+    "timeframe": "2026-02-23"
+  },
+  {
+    "id": "f5008895-603e-4051-94cb-dc6a3b6df269",
+    "timestamp": "2025-11-07T13:59:00.032Z",
+    "companyName": "Acma Group",
+    "industry": "construction",
+    "contactPerson": "56789",
+    "email": "johnson@gmail.com",
+    "location": "Koblenz, Germany",
+    "activity": "operating heavy machinery",
+    "hazards": "underguarded equioments and high voltage site",
+    "timeframe": "2025-12-18"
+  },
+  {
+    "id": "fa243da8-92c7-41cf-b780-de64d96cbb9d",
+    "timestamp": "2025-11-07T14:23:59.442Z",
+    "companyName": "Acme",
+    "industry": "manufacturing",
+    "contactPerson": "0512345664",
+    "email": "jaine@group.com",
+    "location": "Koblenz, Germany",
+    "activity": "operating heavy machinery",
+    "hazards": "unguarded equipments",
+    "timeframe": "2025-11-22"
+  }
+]
