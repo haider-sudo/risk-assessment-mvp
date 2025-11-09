@@ -3,37 +3,36 @@ import React, { useState } from "react";
 import LandingPage from "./components/LandingPage";
 import RequestForm from "./components/RequestForm";
 import ConfirmationPage from "./components/ConfirmationPage";
+import AdminPage from "./components/AdminPage";
 
 export default function App() {
 
-  const [pageState, setPageState] = useState({
-    page: 'landing',  // 'landing', 'form', or 'confirmation'
-    data: null      // Holds submission data for the confirmation page
+const [pageState, setPageState] = useState({
+    page: 'landing',  // 'landing', 'form', 'confirmation', or 'admin'
+    data: null      
   });
 
-   const handleSuccess = (submissionData) => {
-    setPageState({
-      page: 'confirmation',
-      data: submissionData
-    });
+  const handleSuccess = (submissionData) => {
+    setPageState({ page: 'confirmation', data: submissionData });
   };
 
-   // Function to go back to the start
   const goHome = () => {
-    setPageState({
-      page: 'landing',
-      data: null
-    });
+    setPageState({ page: 'landing', data: null });
   };
   
-  // Render logic to show the correct page
+  const showAdmin = () => {
+    setPageState({ page: 'admin', data: null });
+  };
+  
   let content;
   if (pageState.page === 'landing') {
-    content = <LandingPage onStart={() => setPageState({ page: 'form', data: null })} />;
+    content = <LandingPage onStart={() => setPageState({ page: 'form', data: null })} onAdminClick={showAdmin} />;
   } else if (pageState.page === 'form') {
     content = <RequestForm onBack={goHome} onSuccess={handleSuccess} />;
-  } else {
+  } else if (pageState.page === 'confirmation') {
     content = <ConfirmationPage submissionData={pageState.data} onBack={goHome} />;
+  } else if (pageState.page === 'admin') {
+    content = <AdminPage onBack={goHome} />;
   }
 
   return (
@@ -41,19 +40,4 @@ export default function App() {
       {content}
     </div>
   );
-
-  // return (
-  //   <div className="bg-gray-50 min-h-screen text-gray-900 font-inter">
-
-  //     <div className="container mx-auto p-4 sm:p-6 lg:p-8">
-  //       {currentPage === "landing" && (
-  //         <LandingPage onStart={() => setCurrentPage("form")} />
-  //       )}
-
-  //       {currentPage === "form" && (
-  //         <RequestForm onBack={() => setCurrentPage("landing")} />
-  //       )}
-  //     </div>
-  //   </div>
-  // );
 }

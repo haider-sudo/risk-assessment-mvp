@@ -1,6 +1,4 @@
-import React from "react";
-
-function LandingPage({ onStart }) {
+function LandingPage({ onStart, onAdminClick }) {
   return (
     <div className="flex items-center justify-center min-h-[80vh]">
       <div className="max-w-xl w-full bg-white p-8 sm:p-10 rounded-xl shadow-lg border border-gray-200 text-center">
@@ -36,6 +34,12 @@ function LandingPage({ onStart }) {
           className="inline-block w-full sm:w-auto px-8 py-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
         >
           Start Request
+        </button>
+        <button
+          onClick={onAdminClick}
+          className="w-full mt-4 bg-gray-600 text-white font-bold py-2 px-4 rounded-lg text-md hover:bg-gray-700 transition duration-300"
+        >
+          View Admin Panel
         </button>
       </div>
     </div>

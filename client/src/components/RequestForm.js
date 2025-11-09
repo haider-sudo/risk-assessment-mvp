@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from 'axios';
 import { default_from_data } from "../common/constants";
 
 function RequestForm({ onBack, onSuccess }) {
   const [formData, setFormData] = useState(default_from_data);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState(null);
+  const [setIsSubmitting] = useState(false);
+  const [setError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

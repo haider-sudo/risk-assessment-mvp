@@ -1,36 +1,62 @@
 /*
-  This is your complete server/index.js file for Day 3.
+  This is your complete, FINAL server/index.js file for Day 3, 4, and 5.
 */
 const express = require('express');
 const cors = require('cors');
+const fs = require('fs');         
+const path = require('path');       
+const { v4: uuidv4 } = require('uuid'); 
 
-// --- Day 3 Additions ---
-const fs = require('fs');         // Node.js File System module
-const path = require('path');       // Node.js Path module
-const { v4: uuidv4 } = require('uuid'); // For unique IDs
-// --- End Day 3 Additions ---
+// --- Day 4: Import pdfkit ---
+const PDFDocument = require('pdfkit');
 
 const app = express();
 const PORT = 3001;
-
-// --- Day 3: Path to our JSON database file ---
 const DB_PATH = path.join(__dirname, 'db.json');
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-// server/index.js (Additions)
-const PDFDocument = require('pdfkit');
-// ... add this endpoint *before* app.listen()
-
-// Endpoint to GET a PDF for a specific submission
-app.get('/api/report/:id', (req, res) => {
-  const { id } = req.params;
+// --- Endpoint 1: Submit a New Request (Day 3) ---
+app.post('/api/submit', (req, res) => {
+  console.log('Received data:', req.body);
+  const newSubmission = {
+    id: uuidv4(), 
+    timestamp: new Date().toISOString(),
+    ...req.body
+  };
 
   fs.readFile(DB_PATH, 'utf8', (err, data) => {
-    if (err) return res.status(500).send('Error reading database.');
+    if (err) {
+      console.error('Error reading database:', err);
+      return res.status(500).send('Error reading database.');
+    }
+    const db = JSON.parse(data); 
+    db.push(newSubmission); 
 
+    fs.writeFile(DB_PATH, JSON.stringify(db, null, 2), (writeErr) => {
+      if (writeErr) {
+        console.error('Error writing to database:', writeErr);
+        return res.status(500).send('Error writing to database.');
+      }
+      console.log('Data saved successfully.');
+      res.status(200).json(newSubmission);
+    });
+  });
+});
+
+// --- Endpoint 2: Get a PDF Report (Day 4) ---
+app.get('/api/report/:id', (req, res) => {
+  const { id } = req.params;
+  console.log(`Generating PDF for request ID: ${id}`);
+
+  fs.readFile(DB_PATH, 'utf8', (err, data) => {
+    if (err) {
+      console.error('Error reading database:', err);
+      return res.status(500).send('Error reading database.');
+    }
+    
     const db = JSON.parse(data);
     const submission = db.find(item => item.id === id);
 
@@ -43,88 +69,64 @@ app.get('/api/report/:id', (req, res) => {
 
     // Set response headers
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename=request-${submission.id}.pdf`);
+    res.setHeader('Content-Disposition', `attachment; filename=risk-request-${submission.id}.pdf`);
 
     // Pipe PDF to response
     doc.pipe(res);
 
     // Add content
-    doc.fontSize(18).text('Risk Assessment Request Confirmation', { align: 'center' });
-    doc.moveDown(2);
+    doc.fontSize(20).font('Helvetica-Bold').text('Risk Assessment Request', { align: 'center' });
+    doc.moveDown(1.5);
 
-    doc.fontSize(12);
-    doc.text(`Request ID: ${submission.id}`);
-    doc.text(`Timestamp: ${new Date(submission.timestamp).toLocaleString()}`);
-    doc.moveDown();
+    doc.fontSize(12).font('Helvetica-Bold');
+    doc.text('Request ID: ', { continued: true }).font('Helvetica').text(submission.id);
+    doc.text('Submitted On: ', { continued: true }).font('Helvetica').text(new Date(submission.timestamp).toLocaleString());
+    doc.moveDown(1);
+    
+    doc.font('Helvetica-Bold').text('Company: ', { continued: true }).font('Helvetica').text(submission.companyName);
+    doc.font('Helvetica-Bold').text('Industry: ', { continued: true }).font('Helvetica').text(submission.industry);
+    doc.font('Helvetica-Bold').text('Location: ', { continued: true }).font('Helvetica').text(submission.location);
+    doc.moveDown(0.5);
 
-    doc.text(`Company: ${submission.companyName}`);
-    doc.text(`Contact Person: ${submission.contactPerson}`);
-    doc.text(`Email: ${submission.email}`);
-    doc.text(`Location: ${submission.location}`);
-    doc.text(`Activity: ${submission.activity}`);
-    doc.text(`Hazards: ${submission.hazards}`);
-    doc.text(`Timeframe: ${submission.timeframe}`);
+    doc.font('Helvetica-Bold').text('Contact: ', { continued: true }).font('Helvetica').text(`${submission.contactPerson} (${submission.email})`);
+    doc.moveDown(1.5);
+    
+    doc.rect(doc.x, doc.y, 510, 1).fill('#cccccc');
+    doc.moveDown(0.5);
+
+    doc.fontSize(14).font('Helvetica-Bold').text('Assessment Details');
+    doc.moveDown(0.5);
+    
+    doc.fontSize(12).font('Helvetica-Bold').text('Type of Activity: ', { continued: true }).font('Helvetica').text(submission.activity);
+    doc.moveDown(0.5);
+    
+    doc.font('Helvetica-Bold').text('Known Hazards:');
+    doc.font('Helvetica').text(submission.hazards || 'None specified.');
+    doc.moveDown(0.5);
+
+    doc.font('Helvetica-Bold').text('Preferred Timeframe: ', { continued: true }).font('Helvetica').text(submission.timeframe ? new Date(submission.timeframe).toLocaleDateString() : 'ASAP');
 
     // Finalize the PDF
     doc.end();
   });
 });
 
-// Our endpoint
-app.post('/api/submit', (req, res) => {
-  console.log('Received data:', req.body);
-
-  // --- Day 3: Create a new submission object with ID and Timestamp ---
-  const newSubmission = {
-    id: uuidv4(), // Give it a unique ID
-    timestamp: new Date().toISOString(),
-    ...req.body
-  };
-
-  // --- Day 3: Save to the JSON file ---
-
-  // 1. Read the file
+// --- Endpoint 3: Get All Requests (Day 5 - Admin) ---
+app.get('/api/requests', (req, res) => {
+  console.log('Admin request: Fetching all submissions.');
   fs.readFile(DB_PATH, 'utf8', (err, data) => {
     if (err) {
-      // If the file doesn't exist or can't be read, log error and stop.
       console.error('Error reading database:', err);
       return res.status(500).send('Error reading database.');
     }
-
-    let db;
-    try {
-      db = JSON.parse(data); // 2. Parse the JSON string into an array
-    } catch (parseErr) {
-      console.error('Error parsing db.json:', parseErr);
-      return res.status(500).send('Error parsing database.');
-    }
-    
-    db.push(newSubmission); // 3. Add the new data to the array
-
-    // 4. Write the file back
-    fs.writeFile(DB_PATH, JSON.stringify(db, null, 2), (writeErr) => {
-      if (writeErr) {
-        console.error('Error writing to database:', writeErr);
-        return res.status(500).send('Error writing to database.');
-      }
-
-      console.log('Data saved successfully.');
-      
-      // 5. Send back the *newly created* submission
-      // This is important so the frontend knows the new ID.
-      res.status(200).json(newSubmission);
-    });
-  });
-});
-
-app.get('/api/requests', (req, res) => {
-  fs.readFile(DB_PATH, 'utf8', (err, data) => {
-    if (err) return res.status(500).send('Error reading database.');
     const db = JSON.parse(data);
-    res.status(200).json(db);
+    // Send in reverse order so newest are first
+    res.status(200).json(db.reverse()); 
   });
 });
 
+
+// --- Start the Server ---
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
