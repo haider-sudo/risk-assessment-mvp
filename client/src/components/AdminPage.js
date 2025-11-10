@@ -2,7 +2,12 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API_BASE_URL = 'https://risk-assessment-mvp.onrender.com';
+const localApiUrl = process.env.REACT_APP_LOCAL_API_URL;
+const liveApiUrl = process.env.REACT_APP_LIVE_API_URL;
+
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? liveApiUrl 
+  : localApiUrl;
 
 function AdminPage({onBack}) {
  const [requests, setRequests] = useState([]);
@@ -34,9 +39,12 @@ function AdminPage({onBack}) {
           <button
             type="button"
             onClick={onBack}
-            className="text-sm text-gray-500 hover:text-gray-800"
+            className="inline-flex items-center gap-2 px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 hover:text-gray-900 transition-shadow shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
-            &larr; Back to Home
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            <span className="text-sm font-medium">Back to Home</span>
           </button>
         </div>
         
@@ -51,7 +59,7 @@ function AdminPage({onBack}) {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submitted</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Activity</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Industry</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Report</th>
                 </tr>
               </thead>
@@ -76,15 +84,20 @@ function AdminPage({onBack}) {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {new Date(req.timestamp).toLocaleDateString()}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowciwrap text-sm text-gray-500">{req.activity}</td>
+                    <td className="px-6 py-4 whitespace-nowciwrap text-sm text-gray-500">{req.industry}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <a
                         href={`${API_BASE_URL}/api/report/${req.id}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-900"
+                        className="inline-block"
                       >
-                        Download PDF
+                        <button className="inline-flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-shadow shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v9m0 0l3-3m-3 3l-3-3M4 13v4a1 1 0 001 1h10a1 1 0 001-1v-4" />
+                          </svg>
+                          <span className="text-sm font-medium">Download PDF</span>
+                        </button>
                       </a>
                     </td>
                   </tr>

@@ -1,3 +1,10 @@
+const localApiUrl = process.env.REACT_APP_LOCAL_API_URL;
+const liveApiUrl = process.env.REACT_APP_LIVE_API_URL;
+
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? liveApiUrl 
+  : localApiUrl;
+
 function ConfirmationPage({ submissionData, onBack }) {
   if (!submissionData) {
     return (
@@ -10,7 +17,6 @@ function ConfirmationPage({ submissionData, onBack }) {
     );
   }
 
-  // Format the date for better readability
   const formattedDate = new Date(submissionData.timestamp).toLocaleString();
 
   return (
@@ -52,7 +58,7 @@ function ConfirmationPage({ submissionData, onBack }) {
         </div>
 
         <a
-          href={`http://localhost:3001/api/report/${submissionData.id}`}
+          href={`${API_BASE_URL}/api/report/${submissionData.id}`}
           target="_blank"
           rel="noopener noreferrer"
           className="block w-full mb-4"

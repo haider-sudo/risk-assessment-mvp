@@ -1,36 +1,57 @@
 import { useState } from "react";
-import axios from 'axios';
+import axios from "axios";
 import { default_from_data } from "../common/constants";
+import validateRequestForm from "../utils/formValidation";
 
 function RequestForm({ onBack, onSuccess }) {
   const [formData, setFormData] = useState(default_from_data);
-  const [setIsSubmitting] = useState(false);
-  const [setError] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [submitError] = useState(null);
+
+  const localApiUrl = process.env.REACT_APP_LOCAL_API_URL;
+const liveApiUrl = process.env.REACT_APP_LIVE_API_URL;
+
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? liveApiUrl 
+  : localApiUrl;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: value,
+    }));
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: null,
     }));
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
     setIsSubmitting(true);
-    setError(null);
-    try {
-      const response = await axios.post('http://localhost:3001/api/submit', formData);
-      
-      console.log('Server response:', response.data);
-    onSuccess(response.data);
+    setErrors({});
 
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      setError('Failed to submit request. Please try again.');
-      
+    const validationErrors = validateRequestForm(formData);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
     }
-     finally {
+
+    setErrors({});
+    setIsSubmitting(true);
+
+    try {
+      const response = await axios.post(`${API_BASE_URL}/api/submit`, formData);
+
+      console.log("Server response:", response.data);
+      onSuccess(response.data);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setErrors("Failed to submit request. Please try again.");
+    } finally {
       setIsSubmitting(false);
     }
   };
@@ -75,18 +96,22 @@ function RequestForm({ onBack, onSuccess }) {
             htmlFor="companyName"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Company Name
+            Company Name <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             id="companyName"
             name="companyName"
             value={formData.companyName}
-              onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            onChange={handleChange}
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500 ${
+              errors.companyName ? "border-red-500" : "border-gray-300"
+            }`}
             placeholder="e.g., Acme Corp"
-            required
           />
+          {errors.companyName && (
+            <p className="text-red-500 text-sm mt-1">{errors.companyName}</p>
+          )}
         </div>
 
         <div>
@@ -100,10 +125,9 @@ function RequestForm({ onBack, onSuccess }) {
             id="industry"
             name="industry"
             value={formData.industry}
-              onChange={handleChange}
+            onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             defaultValue=""
-            required
           >
             <option value="" disabled>
               Select an industry
@@ -122,18 +146,22 @@ function RequestForm({ onBack, onSuccess }) {
             htmlFor="location"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Job Site Location
+            Job Site Location <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             id="location"
             name="location"
             value={formData.location}
-              onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            onChange={handleChange}
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500 ${
+              errors.location ? "border-red-500" : "border-gray-300"
+            }`}
             placeholder="e.g., 123 Main St, Springfield"
-            required
           />
+          {errors.location && (
+            <p className="text-red-500 text-sm mt-1">{errors.location}</p>
+          )}
         </div>
 
         <div>
@@ -141,18 +169,22 @@ function RequestForm({ onBack, onSuccess }) {
             htmlFor="contactPerson"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Contact Person
+            Contact Person <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             id="contactPerson"
             name="contactPerson"
             value={formData.contactPerson}
-              onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            onChange={handleChange}
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500 ${
+              errors.contactPerson ? "border-red-500" : "border-gray-300"
+            }`}
             placeholder="e.g., Jane Doe"
-            required
           />
+          {errors.contactPerson && (
+            <p className="text-red-500 text-sm mt-1">{errors.contactPerson}</p>
+          )}
         </div>
 
         {/* Contact Email */}
@@ -161,18 +193,22 @@ function RequestForm({ onBack, onSuccess }) {
             htmlFor="email"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Contact Email
+            Contact Email <span className="text-red-500">*</span>
           </label>
           <input
             type="email"
             id="email"
             name="email"
             value={formData.email}
-              onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            onChange={handleChange}
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500 ${
+              errors.email ? "border-red-500" : "border-gray-300"
+            }`}
             placeholder="e.g., jane.doe@example.com"
-            required
           />
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+          )}
         </div>
 
         <div className="md:col-span-2">
@@ -187,10 +223,9 @@ function RequestForm({ onBack, onSuccess }) {
             id="activity"
             name="activity"
             value={formData.activity}
-              onChange={handleChange}
+            onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             placeholder="e.g., Operating heavy machinery, chemical handling"
-            required
           />
         </div>
 
@@ -205,7 +240,7 @@ function RequestForm({ onBack, onSuccess }) {
             id="hazards"
             name="hazards"
             value={formData.hazards}
-              onChange={handleChange}
+            onChange={handleChange}
             rows={4}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             placeholder="e.g., Unguarded equipment, poor ventilation, trip hazards"
@@ -217,26 +252,36 @@ function RequestForm({ onBack, onSuccess }) {
             htmlFor="timeframe"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Preferred Timeframe (Start Date)
+            Preferred Timeframe (Start Date) <span className="text-red-500">*</span>
           </label>
           <input
             type="date"
             id="timeframe"
             name="timeframe"
             value={formData.timeframe}
-              onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            required
+            onChange={handleChange}
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500 ${
+              errors.timeframe ? "border-red-500" : "border-gray-300"
+            }`}
           />
+          {errors.timeframe && (
+            <p className="text-red-500 text-sm mt-1">{errors.timeframe}</p>
+          )}
         </div>
 
-        <div className="md:col-span-2 text-right mt-4">
+        <div className="mt-8 border-t pt-6">
           <button
             type="submit"
-            className="w-full md:w-auto px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
+            disabled={isSubmitting}
+            className="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg text-lg hover:bg-blue-700 transition duration-300 ease-in-out transform hover:-translate-y-1 shadow-lg disabled:bg-gray-400"
           >
-            Submit Request
+            {isSubmitting ? "Submitting..." : "Submit Request"}
           </button>
+
+          {/* --- NEW: Display for general server errors --- */}
+          {submitError && (
+            <p className="text-red-500 text-center mt-4">{submitError}</p>
+          )}
         </div>
       </form>
     </div>

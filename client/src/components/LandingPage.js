@@ -1,8 +1,8 @@
 function LandingPage({ onStart, onAdminClick }) {
   return (
-    <div className="flex items-center justify-center min-h-[80vh]">
-      <div className="max-w-xl w-full bg-white p-8 sm:p-10 rounded-xl shadow-lg border border-gray-200 text-center">
-        {/* Header Icon */}
+    // Use min-h-screen and flex utils to center the card perfectly
+    <div className="flex items-center justify-center min-h-[80vh] p-4">
+      <div className="max-w-xl w-full bg-white p-10 sm:p-12 rounded-2xl shadow-2xl text-center">
         <div className="w-16 h-16 bg-blue-100 text-blue-600 flex items-center justify-center rounded-full mx-auto mb-6">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -20,24 +20,29 @@ function LandingPage({ onStart, onAdminClick }) {
           </svg>
         </div>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">
+        <h1 className="text-3xl font-bold text-gray-800 mb-3">
           Workplace Risk Assessment Request
         </h1>
 
-        <p className="text-gray-600 mb-8 text-lg">
+        <p className="text-base text-gray-600 mb-8">
           Welcome! This tool helps you request a formal risk assessment for your
           workplace. Please provide the necessary details in the following form.
         </p>
-
         <button
           onClick={onStart}
-          className="inline-block w-full sm:w-auto px-8 py-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
+          className="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg
+                     hover:bg-blue-700 hover:-translate-y-1 
+                     focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 
+                     transition-all duration-300 ease-in-out"
         >
           Start Request
         </button>
         <button
           onClick={onAdminClick}
-          className="w-full mt-4 bg-gray-600 text-white font-bold py-2 px-4 rounded-lg text-md hover:bg-gray-700 transition duration-300"
+          className="w-full mt-4 bg-transparent text-gray-600 font-semibold py-2 px-4 rounded-lg 
+                     hover:bg-gray-100 hover:text-gray-800 
+                     focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2
+                     transition-colors duration-200"
         >
           View Admin Panel
         </button>
@@ -45,5 +50,6 @@ function LandingPage({ onStart, onAdminClick }) {
     </div>
   );
 }
+
 
 export default LandingPage;

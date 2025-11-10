@@ -34,5 +34,17 @@
     "activity": "operating heavy machinery",
     "hazards": "unguarded equipments",
     "timeframe": "2025-11-22"
+  },
+  {
+    "id": "daa32903-76c8-417b-bc61-c1205103db1e",
+    "timestamp": "2025-11-10T13:32:18.675Z",
+    "companyName": "Debeka",
+    "industry": "technology",
+    "contactPerson": "Antony",
+    "email": "antony@gmail.com",
+    "location": "Koblenz, Germany",
+    "activity": "Network handeling and sorting",
+    "hazards": "wires are very complecated please handle with care.",
+    "timeframe": "2025-11-29"
   }
 ]
