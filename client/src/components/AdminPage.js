@@ -2,12 +2,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const localApiUrl = process.env.REACT_APP_LOCAL_API_URL;
-const liveApiUrl = process.env.REACT_APP_LIVE_API_URL;
+// const localApiUrl = process.env.REACT_APP_LOCAL_API_URL;
+// const liveApiUrl = process.env.REACT_APP_LIVE_API_URL;
 
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? liveApiUrl 
-  : localApiUrl;
+const API_BASE_URL = 'https://risk-assessment-mvp.onrender.com'
 
 function AdminPage({onBack}) {
  const [requests, setRequests] = useState([]);
