@@ -2,11 +2,21 @@ const PDFDocument = require("pdfkit");
 /**
  * generatePdfReport
  * Creates a structured PDF for a submission and streams it to the response.
- * @param {object} submission - The submission data from db.json
- * @param {object} res - The Express response object
+ * @param {object} submission
+ * @param {object} res
  */
 function generatePdfReport(submission, res) {
   const doc = new PDFDocument({ margin: 50, layout: "portrait", size: "A4" });
+  doc.on("error", (err) => {
+    console.error("PDF generation error (doc stream):", err);
+    if (!res.headersSent) {
+      res.status(500).send("Error generating PDF report.");
+    }
+  });
+
+  res.on("error", (err) => {
+    console.error("Response stream error:", err);
+  });
 
   res.setHeader("Content-Type", "application/pdf");
   res.setHeader(
@@ -47,7 +57,7 @@ function generatePdfReport(submission, res) {
   doc
     .font("Helvetica")
     .fontSize(11)
-    .text(`Request ID: ${submission.id.substring(0, 8)}`, { align: "right" });
+    .text(`Request ID: ${submission.id}`, { align: "right" });
   doc
     .font("Helvetica")
     .fontSize(11)
@@ -75,6 +85,7 @@ function generatePdfReport(submission, res) {
 
   doc.x = leftColumnX;
   doc.moveDown(2);
+
   generateSectionHeader("Assessment Details");
   generateHr(doc.y);
   doc.moveDown(1);
@@ -103,14 +114,16 @@ function generatePdfReport(submission, res) {
     .lineTo(550, bottomMarginY)
     .stroke();
 
-  doc.y = bottomMarginY + 10;
+  const footerY = bottomMarginY + 10;
+
   doc
     .font("Helvetica-Oblique")
     .fontSize(9)
-    .text(`Generated on ${new Date().toLocaleDateString()}`, 50, {
+    .text(`Generated on ${new Date().toLocaleDateString()}`, 50, footerY, {
       align: "center",
       width: 500,
     });
+
   doc.end();
 }
 

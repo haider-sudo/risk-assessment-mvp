@@ -128,20 +128,6 @@ function AdminPage({ onBack }) {
                         className="inline-block"
                       >
                         <button className="inline-flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-shadow shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4"
-                            viewBox="0 0 20 20"
-                            fill="none"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M12 3v9m0 0l3-3m-3 3l-3-3M4 13v4a1 1 0 001 1h10a1 1 0 001-1v-4"
-                            />
-                          </svg>
                           <span className="text-sm font-medium">
                             Download PDF
                           </span>

@@ -1,18 +1,6 @@
 [
   {
-    "id": "e4759771-f847-4471-bcd3-19d45eeb966f",
-    "timestamp": "2025-11-07T08:38:46.328Z",
-    "companyName": "qwkjdklwjdlkqw",
-    "industry": "manufacturing",
-    "contactPerson": "qldkkljd",
-    "email": "john@gmail.com",
-    "location": "lqwdlkdkqw",
-    "activity": "qwdqkdwjd",
-    "hazards": "qwkljdlkjwdkljwd",
-    "timeframe": "2026-02-23"
-  },
-  {
-    "id": "f5008895-603e-4051-94cb-dc6a3b6df269",
+    "id": "f5008895",
     "timestamp": "2025-11-07T13:59:00.032Z",
     "companyName": "Acma Group",
     "industry": "construction",
@@ -20,11 +8,11 @@
     "email": "johnson@gmail.com",
     "location": "Koblenz, Germany",
     "activity": "operating heavy machinery",
-    "hazards": "underguarded equioments and high voltage site",
+    "hazards": "underguarded equipments and high voltage lines",
     "timeframe": "2025-12-18"
   },
   {
-    "id": "fa243da8-92c7-41cf-b780-de64d96cbb9d",
+    "id": "fa243da8",
     "timestamp": "2025-11-07T14:23:59.442Z",
     "companyName": "Acme",
     "industry": "manufacturing",
@@ -36,15 +24,39 @@
     "timeframe": "2025-11-22"
   },
   {
-    "id": "daa32903-76c8-417b-bc61-c1205103db1e",
-    "timestamp": "2025-11-10T13:32:18.675Z",
-    "companyName": "Debeka",
-    "industry": "technology",
-    "contactPerson": "Antony",
-    "email": "antony@gmail.com",
-    "location": "Koblenz, Germany",
-    "activity": "Network handeling and sorting",
-    "hazards": "wires are very complecated please handle with care.",
+    "id": "1f69d4af",
+    "timestamp": "2025-11-11T13:17:25.213Z",
+    "companyName": "Deutsche Bank",
+    "industry": "other",
+    "contactPerson": "Alex",
+    "email": "alex_bernard@db.com",
+    "location": "Höhr-Grenzhausen",
+    "activity": "Accounting",
+    "hazards": "Handle the large amount transactions",
     "timeframe": "2025-11-29"
+  },
+  {
+    "id": "7fe87899",
+    "timestamp": "2025-11-11T14:34:49.128Z",
+    "companyName": "Sahm",
+    "industry": "manufacturing",
+    "contactPerson": "Jane Smith",
+    "email": "jane.sm@sahm.com",
+    "location": "Höhr-Grenzhausen",
+    "activity": "operating heavy machinery",
+    "hazards": "Poor Ventilation",
+    "timeframe": "2025-11-26"
+  },
+  {
+    "id": "4abefc21",
+    "timestamp": "2025-11-11T15:22:11.513Z",
+    "companyName": "Apple",
+    "industry": "manufacturing",
+    "contactPerson": "Tim Cook",
+    "email": "tim.cook@apple.com",
+    "location": "Silicon Valley",
+    "activity": "Smart phone manufacturing",
+    "hazards": "potential tariff impacts, legal battles over app store commissions",
+    "timeframe": "2025-11-15"
   }
 ]

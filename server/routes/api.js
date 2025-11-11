@@ -12,7 +12,7 @@ const DB_PATH = path.join(__dirname, "..", "db.json");
 router.post("/submit", (req, res) => {
   console.log("Received data:", req.body);
   const newSubmission = {
-    id: uuidv4(),
+    id: uuidv4().substring(0, 8),
     timestamp: new Date().toISOString(),
     ...req.body,
   };
