@@ -1,9 +1,8 @@
-// const localApiUrl = process.env.REACT_APP_LOCAL_API_URL;
-// const liveApiUrl = process.env.REACT_APP_LIVE_API_URL;
+const localApiUrl = process.env.REACT_APP_LOCAL_API_URL;
+const liveApiUrl = process.env.REACT_APP_LIVE_API_URL;
 
-const API_BASE_URL = 'https://risk-assessment-mvp.onrender.com'
-  // ? liveApiUrl 
-  // : localApiUrl;
+const API_BASE_URL =
+  process.env.NODE_ENV === "production" ? liveApiUrl : localApiUrl;
 
 function ConfirmationPage({ submissionData, onBack }) {
   if (!submissionData) {
@@ -64,8 +63,19 @@ function ConfirmationPage({ submissionData, onBack }) {
           className="block w-full mb-4"
         >
           <button className="w-full bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg text-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
+              />
             </svg>
             Download PDF Summary
           </button>

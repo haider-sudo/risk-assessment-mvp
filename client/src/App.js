@@ -6,32 +6,38 @@ import ConfirmationPage from "./components/ConfirmationPage";
 import AdminPage from "./components/AdminPage";
 
 export default function App() {
-
-const [pageState, setPageState] = useState({
-    page: 'landing',  // 'landing', 'form', 'confirmation', or 'admin'
-    data: null      
+  const [pageState, setPageState] = useState({
+    page: "landing",
+    data: null,
   });
 
   const handleSuccess = (submissionData) => {
-    setPageState({ page: 'confirmation', data: submissionData });
+    setPageState({ page: "confirmation", data: submissionData });
   };
 
   const goHome = () => {
-    setPageState({ page: 'landing', data: null });
+    setPageState({ page: "landing", data: null });
   };
-  
+
   const showAdmin = () => {
-    setPageState({ page: 'admin', data: null });
+    setPageState({ page: "admin", data: null });
   };
-  
+
   let content;
-  if (pageState.page === 'landing') {
-    content = <LandingPage onStart={() => setPageState({ page: 'form', data: null })} onAdminClick={showAdmin} />;
-  } else if (pageState.page === 'form') {
+  if (pageState.page === "landing") {
+    content = (
+      <LandingPage
+        onStart={() => setPageState({ page: "form", data: null })}
+        onAdminClick={showAdmin}
+      />
+    );
+  } else if (pageState.page === "form") {
     content = <RequestForm onBack={goHome} onSuccess={handleSuccess} />;
-  } else if (pageState.page === 'confirmation') {
-    content = <ConfirmationPage submissionData={pageState.data} onBack={goHome} />;
-  } else if (pageState.page === 'admin') {
+  } else if (pageState.page === "confirmation") {
+    content = (
+      <ConfirmationPage submissionData={pageState.data} onBack={goHome} />
+    );
+  } else if (pageState.page === "admin") {
     content = <AdminPage onBack={goHome} />;
   }
 

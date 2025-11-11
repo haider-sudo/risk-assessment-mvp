@@ -9,10 +9,12 @@ function RequestForm({ onBack, onSuccess }) {
   const [errors, setErrors] = useState({});
   const [submitError] = useState(null);
 
-//   const localApiUrl = process.env.REACT_APP_LOCAL_API_URL;
-// const liveApiUrl = process.env.REACT_APP_LIVE_API_URL;
+  const localApiUrl =
+    process.env.REACT_APP_LOCAL_API_URL || "http://localhost:3001";
+  const liveApiUrl = process.env.REACT_APP_LIVE_API_URL;
 
-const API_BASE_URL = 'https://risk-assessment-mvp.onrender.com'
+  const API_BASE_URL =
+    process.env.NODE_ENV === "production" ? liveApiUrl : localApiUrl;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -250,7 +252,8 @@ const API_BASE_URL = 'https://risk-assessment-mvp.onrender.com'
             htmlFor="timeframe"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Preferred Timeframe (Start Date) <span className="text-red-500">*</span>
+            Preferred Timeframe (Start Date){" "}
+            <span className="text-red-500">*</span>
           </label>
           <input
             type="date"
@@ -276,7 +279,6 @@ const API_BASE_URL = 'https://risk-assessment-mvp.onrender.com'
             {isSubmitting ? "Submitting..." : "Submit Request"}
           </button>
 
-          {/* --- NEW: Display for general server errors --- */}
           {submitError && (
             <p className="text-red-500 text-center mt-4">{submitError}</p>
           )}
